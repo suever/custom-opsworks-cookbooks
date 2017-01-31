@@ -1,7 +1,3 @@
 See http://docs.aws.amazon.com/opsworks/latest/userguide/customizing.html
 
-Changes in this branch:
-
-Far-future expiration headers for rails assets.
-
-_NOTE: Since our particular setup involves a load balancer forwarding decrypted requests to port 80 on OpsWorks instances, we don't care about the NGINX SSL settings. If we **did** care about them, we'd probably also need to disable SSLv3 due to the POODLE vulnerability._
+Don't add changes to the master branch. Instead, use Chef-version branches like the AWS repo does.
