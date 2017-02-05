@@ -2,6 +2,23 @@ upstream unicorn_<%= @application[:domains].first %> {
  server unix:<%= @application[:deploy_to]%>/shared/sockets/unicorn.sock fail_timeout=0;
 }
 
+# [RIGOR MODIFICATIONS]
+
+# Determine what max-age to use in the Cache-Control HTTP header for asset requests
+map $request_uri $asset_expires {
+  default    86400;                 # no cachebuster; e.g. /assets/styles.css; 1 day
+  ~\?[0-9]+$ 31536000;              # query string cachebuster; e.g. /css/styles.css?12345; 1 year
+  ~^/assets/.*-[a-f|0-9]+ 31536000; # digest cachebuster; e.g. /assets/styles-abc12345.css; 1 year
+}
+
+# If applicable (determined by regexp below), send back Access-Control-Allow-Origin header to match request's Origin
+# header.
+map $http_origin $allow_origin {
+  default "";
+  ~<%= node[:nginx][:cors_origin_regex] || "^http(s?):\\/\\/(.*\\.)?rigor\\.com$" %> $http_origin;
+}
+# [END RIGOR MODIFICATION]
+
 server {
   listen 80;
   server_name <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
@@ -53,14 +70,23 @@ server {
     deny all;
   }
 
-  # [RIGOR MODIFICATION] Give static assets far-future expiration headers.
-  # http://guides.rubyonrails.org/asset_pipeline.html#far-future-expires-header
-  location ~ ^/assets/ {
-    expires 1y;
-    add_header Cache-Control public;
+  # [RIGOR MODIFICATION] Give static assets far-future expiration headers and add appopriate CORS headers.
 
+  # See http://guides.rubyonrails.org/asset_pipeline.html#far-future-expires-header
+  #
+  #   We are not using the "expires" directive because variables can't be used with it until nginx 1.7.9, and the
+  #   "Expires" HTTP header is only useful for HTTP/1.0 anyway.
+  #
+  #   In addition to files under /assets, we need to handle those not yet moved into the asset pipeline (hence the crazy
+  #   regexp).
+  location ~ (^/assets/)|(.+\.(ico|css|js|gif|jp?g|png|eot|woff|ttf|svg)$) {
+    add_header Cache-Control "public; max-age=${asset_expires}";
     add_header ETag "";
+
+    add_header Access-Control-Allow-Origin $allow_origin;
+    add_header Access-Control-Allow-Methods "GET, HEAD";
   }
+  # [END RIGOR MODIFICATION]
 
   error_page 500 502 503 504 /500.html;
   location = /500.html {
