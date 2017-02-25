@@ -10,4 +10,4 @@ _NOTE: Since our particular setup involves a load balancer forwarding decrypted 
 
 To run a deploy on an OpsWorks instance via the command-line: `$: sudo opsworks-agent-cli run_command deploy`
 
-To test OpsWorks hooks under the app's deploy/ dir, update this custom cookbook to override the default `deploy` recipe to NOT pull from github so that you can edit the hook files directly in the current/ dir without them being overwritten. _TODO: write better instructions for this._
+To test OpsWorks hooks under the app's deploy/ dir, update this custom cookbook to override the [default `deploy` recipe](https://github.com/aws/opsworks-cookbooks/blob/release-chef-11.10/deploy/definitions/opsworks_deploy.rb) to NOT pull from github so that you can edit the hook files directly in the current/ dir without them being overwritten. _TODO: write better instructions for this._
