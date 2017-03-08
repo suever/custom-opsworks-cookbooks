@@ -45,3 +45,4 @@ The git clone and replacing of current code by the deploy process is the issue h
 
 - `$ sudo vi /etc/nginx/sites-enabled/[environment]`
 - `$ sudo service nginx restart`
+- Error log: `$ sudo tail -f /var/log/nginx/error.log`
