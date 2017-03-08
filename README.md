@@ -43,5 +43,5 @@ The git clone and replacing of current code by the deploy process is the issue h
 
 ## Testing nginx settings (on a non-prod Stack!!!)
 
-`$ sudo vi /etc/nginx/sites-enabled/[environment]`
-`$ sudo service nginx restart`
+- `$ sudo vi /etc/nginx/sites-enabled/[environment]`
+- `$ sudo service nginx restart`
