@@ -40,3 +40,8 @@ so that you can continually edit this file and run the CLI deploy command -- no 
 ### Testing other deploy hooks
 
 The git clone and replacing of current code by the deploy process is the issue here. TODO: replace with proper instructions if this is ever really needed / figured out.
+
+## Testing nginx settings (on a non-prod Stack!!!)
+
+`$ sudo vi /etc/nginx/sites-enabled/[environment]`
+`$ sudo service nginx restart`
