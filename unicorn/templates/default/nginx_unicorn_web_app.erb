@@ -79,7 +79,7 @@ server {
   #
   #   In addition to files under /assets, we need to handle those not yet moved into the asset pipeline (hence the crazy
   #   regexp).
-  location ~ (^/assets/)|(.+\.(ico|css|js|gif|jp?g|png|eot|woff|ttf|svg)$) {
+  location ~ (^/assets/)|(.+\.(ico|css|js|gif|jpe?g|png|eot|woff|ttf|svg)$) {
     add_header Cache-Control "public; max-age=${asset_expires}";
     add_header ETag "";
 
