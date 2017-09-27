@@ -7,11 +7,12 @@
   username: <%= @database[:username].to_s.inspect %>
   password: <%= @database[:password].to_s.inspect %>
   reconnect: <%= @database[:reconnect] ? 'true' : 'false' %>
-<!-- custom -->
-<% if @database[:strict] -%>
+<% if @database.key?(:strict) -%>
   strict: <%= @database[:strict] %>
 <% end -%>
-<!-- end custom -->
+<% if @database[:timeout] -%>
+  timeout: <%= @database[:timeout] %>
+<% end -%>
 <% if @database[:pool] -%>
   pool: <%= @database[:pool].to_i.inspect %>
 <% end -%>
