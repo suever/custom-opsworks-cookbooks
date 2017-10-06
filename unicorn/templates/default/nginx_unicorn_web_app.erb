@@ -81,7 +81,6 @@ server {
   }
 
   # [RIGOR MODIFICATION] Give static assets far-future expiration headers and add appopriate CORS headers.
-
   # See http://guides.rubyonrails.org/asset_pipeline.html#far-future-expires-header
   #
   #   We are not using the "expires" directive because variables can't be used with it until nginx 1.7.9, and the
@@ -89,13 +88,6 @@ server {
   #
   #   In addition to files under /assets, we need to handle those not yet moved into the asset pipeline (hence the crazy
   #   regexp).
-  location ~ (^/assets/)|(.+\.(ico|css|js|gif|jpe?g|png|eot|woff|ttf|svg|map)$) {
-    add_header Cache-Control "public; max-age=${asset_expires}";
-    add_header ETag "";
-
-    add_header Access-Control-Allow-Origin $allow_origin;
-    add_header Access-Control-Allow-Methods "GET, HEAD";
-  }
 
   # Allow universal access to fontawesome fonts
   # TODO: In the future, we want to move these to an opswork config setting
@@ -104,6 +96,14 @@ server {
     add_header ETag "";
 
     add_header Access-Control-Allow-Origin "*";
+    add_header Access-Control-Allow-Methods "GET, HEAD";
+  }
+
+  location ~ (^/assets/)|(.+\.(ico|css|js|gif|jpe?g|png|eot|woff|ttf|svg|map)$) {
+    add_header Cache-Control "public; max-age=${asset_expires}";
+    add_header ETag "";
+
+    add_header Access-Control-Allow-Origin $allow_origin;
     add_header Access-Control-Allow-Methods "GET, HEAD";
   }
 
