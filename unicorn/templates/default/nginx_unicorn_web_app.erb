@@ -39,6 +39,16 @@ server {
     client_max_body_size <%= @application[:nginx][:client_max_body_size] %>;
   <% end %>
 
+  # [RIGOR MODIFICATION]
+  # Instantly reject all PHP requests to prevent bots from ever actually reaching the app
+  # calling internal, redirects them to the rigor-branded 404 page
+  location ~ \.php$ {
+    internal;
+  }
+
+  error_page 404 /404.html
+  # [END RIGOR MODIFICATION]
+
   location / {
     try_files $uri/index.html $uri/index.htm @unicorn;
   }
